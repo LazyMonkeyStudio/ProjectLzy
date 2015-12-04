@@ -11,21 +11,24 @@ import android.view.SurfaceHolder;
  */
 public class Engine_GamePanel extends GamePanel {
     private DebugGUI debug_gui;
-    int bg_count = 1;
+    private Physics physics = new Physics(this);
+    private GameObject player;
 
     public Engine_GamePanel(Context context, int targetFPS)
     {
         super(context, targetFPS);
         thread.setGamePanel(this);
-        //background = new Background_Scrolling(image); //pull image from drawable folder
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder)
     {
-        background = new Background(this, BitmapFactory.decodeResource(getResources(), R.drawable.background));
-        super.surfaceCreated(holder);
         debug_gui = new DebugGUI();
+        background = new Background_Scrolling(this, BitmapFactory.decodeResource(getResources(), R.drawable.background));
+        player = new GameObject("player", BitmapFactory.decodeResource(getResources(), R.drawable.player), 100, 100, 1, 3);
+        entity_m.addEntity(player);
+
+        super.surfaceCreated(holder);
     }
 
     @Override
@@ -37,21 +40,6 @@ public class Engine_GamePanel extends GamePanel {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        switch (bg_count)
-        {
-            case 0:
-                background = new Background(this, BitmapFactory.decodeResource(getResources(), R.drawable.background));
-                bg_count = 1;
-                break;
-            case 1:
-                background = new Background_Scrolling(this, BitmapFactory.decodeResource(getResources(), R.drawable.background));
-                bg_count = 2;
-                break;
-            case 2:
-                background = new Background_World(this, BitmapFactory.decodeResource(getResources(), R.drawable.background), 8196, 1536);
-                bg_count = 0;
-                break;
-        }
         return super.onTouchEvent(event);
     }
 
@@ -59,14 +47,23 @@ public class Engine_GamePanel extends GamePanel {
     public void  update()
     {
         super.update();
+        physics.update();
+        background.update();
+
         debug_gui.update();
-        debug_gui.fpsCount = (int)thread.averageFPS;
+        debug_gui.fpsCount = (int) thread.averageFPS;
+
+        entity_m.update();
     }
 
     @Override
     public void draw(Canvas canvas)
     {
         super.draw(canvas);
+        background.draw(canvas);
+
         debug_gui.draw(canvas);
+
+        entity_m.draw(canvas);
     }
 }

@@ -15,10 +15,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public static int HEIGHT;
     public MainThread thread;
     public Background background;
+    public EntityManager entity_m;
 
     public GamePanel(Context context, int targetFPS)
     {
         super(context);
+        entity_m = new EntityManager();
         //add the callback to the surface holder to intercept events
         getHolder().addCallback(this);
         thread = new MainThread(getHolder(), this);
@@ -64,17 +66,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     public void update()
     {
-        if (background != null)
-            background.update();
     }
 
     @Override
     public void draw(Canvas canvas)
     {
         super.draw(canvas);
-
-        if (background != null) {
-            background.draw(canvas);
-        }
     }
 }
