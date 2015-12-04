@@ -20,30 +20,31 @@ public class GameObject {
     private Animation animation = new Animation();
     private long startTime;
 
-    public GameObject(String tag, Bitmap res, int x, int y, int columns, int rows)
-    {
+    public GameObject(String tag, Bitmap res, int x, int y, int columns, int rows) {
         //spritesheet = res;
         this.tag = tag;
         setX(x);
         setY(y);
-        this.WIDTH = res.getWidth()/rows;
-        this.HEIGHT = res.getHeight()/columns;
+        this.WIDTH = res.getWidth() / rows;
+        this.HEIGHT = res.getHeight() / columns;
         bounds = new Rect(x, y, WIDTH, HEIGHT);
-        int numframes = columns*rows;
+        int numframes = columns * rows;
         int sheet_index = 0;
 
         Bitmap[] image = new Bitmap[numframes];
 
-        for (int col = 0; col < columns; col++)
+        if (columns > 1 || rows > 1)
         {
-            for(int r = 0; r < rows; r++)
-            {
-                image[sheet_index] = Bitmap.createBitmap(res, r*WIDTH, col*HEIGHT, WIDTH, HEIGHT);
+            for (int col = 0; col < columns; col++) {
+                for (int r = 0; r < rows; r++) {
+                    image[sheet_index] = Bitmap.createBitmap(res, r * WIDTH, col * HEIGHT, WIDTH, HEIGHT);
 
-                System.out.println(image[sheet_index] + "," + image.length);
-                sheet_index++;
+                    //System.out.println(image[sheet_index] + "," + image.length);
+                    sheet_index++;
+                }
             }
         }
+
 
         if(animate) {
             animation.setFrames(image);

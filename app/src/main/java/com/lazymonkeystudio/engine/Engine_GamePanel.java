@@ -40,6 +40,8 @@ public class Engine_GamePanel extends GamePanel {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+        entity_m.addEntity(player);
+        System.out.println("tapped");
         return super.onTouchEvent(event);
     }
 
